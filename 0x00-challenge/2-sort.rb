@@ -1,23 +1,33 @@
 #!/usr/bin/env ruby
 
-def sort_array(array)
-  numbers = array.select { |item| item.is_a?(Numeric) }
-  strings = array.select { |item| item.is_a?(String) }
+###
+#
+#  Sort integer arguments (ascending) 
+#
+###
 
-  sorted_numbers = numbers.sort
-  sorted_strings = strings.sort
+result = []
+ARGV.each do |arg|
+    # skip if not integer
+    next if arg !~ /^-?[0-9]+$/
 
-  sorted_numbers.each { |num| puts num }
-  sorted_strings.each { |str| puts str }
+    # convert to integer
+    i_arg = arg.to_i
+    
+    # insert result at the right position
+    is_inserted = false
+    i = 0
+    l = result.size
+    while !is_inserted && i < l do
+        if result[i] < i_arg
+            i += 1
+        else
+            result.insert(i, i_arg)
+            is_inserted = true
+            break
+        end
+    end
+    result << i_arg if !is_inserted
 end
 
-if __FILE__ == $0
-  if ARGV.empty?
-    puts "Usage: #{$0} <list_of_elements>"
-    exit(1)
-  end
-
-  array = ARGV.map { |item| item.to_i.to_s == item ? item.to_i : item }
-  sort_array(array)
-end
-
+puts result
